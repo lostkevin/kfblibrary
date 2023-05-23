@@ -47,3 +47,6 @@ You can implement this API with the help of IDA Pro.
 ## Notes
 
 Some codes are from [KFB_Convert_TIFF](https://github.com/babiking/KFB_Convert_TIFF). If there is any bug in the code, please contact me via issue!
+
+## Known issues
+Some APIs do not follow [openslide](https://github.com/openslide/openslide/blob/main/src/openslide.h), e.g. `kfbslide_get_best_level_for_downsample` and `kfbslide_read_region`. Modifications are needed to call openslide-based library like DeepZoom.
