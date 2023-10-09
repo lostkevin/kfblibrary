@@ -21,7 +21,6 @@ ImgHandle* kfbslide_open(const char * dllPath, const char* filename) {
     }
     if(!InitImageFile(s->imgStruct, filename)) {
         delete s;
-        printf("%s%s\n", "Error: Initialization failure. File: ", filename);
         return nullptr;
     }
     HeaderInfoStruct headerInfo;
@@ -35,13 +34,6 @@ ImgHandle* kfbslide_open(const char * dllPath, const char* filename) {
                                             &(headerInfo.BlockSize));
     if(!getHeaderInfoRtn) {
         delete s;
-        printf("%d %d %d %f %lf %f %d\n", headerInfo.Height, 
-                                            headerInfo.Width, 
-                                            headerInfo.ScanScale, 
-                                            headerInfo.SpendTime, 
-                                            headerInfo.ScanTime,
-                                            headerInfo.CapRes,
-                                            headerInfo.BlockSize);
         return nullptr;
     }
     s->properties["openslide.mpp-x"] = to_string(headerInfo.CapRes);
