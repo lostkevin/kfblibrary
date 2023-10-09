@@ -85,9 +85,9 @@ double kfbslide_get_level_downsample(ImgHandle* s, int level) {
     return 0.0;
 }
 
-int kfbslide_get_best_level_for_downsample(ImgHandle* s, double scale_factor) {
-    if(scale_factor <= 0 || scale_factor > s->scanScale) return 0;
-    double downsample_factor = s->scanScale / scale_factor;
+int kfbslide_get_best_level_for_downsample(ImgHandle* s, double downsample) {
+    if(downsample < 1) return 0;
+    double downsample_factor = downsample;
     for(int i = 0; i < s->maxLevel; i++) {
         if((1LL << (i + 1)) > downsample_factor ) return i;
     }
@@ -214,7 +214,12 @@ bool kfbslide_get_image_roi_stream(ImgHandle* s, int level, int x, int y, int wi
 		printf("%s\n", "Error: dlsym failed.");
         exit(EXIT_FAILURE);
 	}
-    float fScale = s->scanScale / kfbslide_get_level_downsample(s, level);
+
+    double downsample_factor = kfbslide_get_level_downsample(s, level);
+    float fScale = s->scanScale / downsample_factor;
+    x = x / downsample_factor;
+    y = y / downsample_factor;
+    
     bool ret = GetImageDataRoi(s->imgStruct, fScale, x, y, width, height, buf, nBytes, true);
     s->alloc_mem.push_back(*buf);
     return ret;
